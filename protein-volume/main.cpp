@@ -153,7 +153,6 @@ ifstream open_file(int& size)
 void process_file(ifstream& fin, Box& box, Atom atoms [])
 {
    double x, y, z, r;
-   double r_min = std::numeric_limits<double>::max();
    double r_max = std::numeric_limits<double>::min();
    int i = 0;
    
