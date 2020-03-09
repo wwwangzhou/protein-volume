@@ -56,7 +56,7 @@ public:
    bool operator>=(const Atom&) const;
    bool operator<=(const Atom&) const;
    double get_r() const {return _x;}
-
+   
    friend ostream& operator<<(ostream&, const Atom& atom);
 };
 
@@ -89,8 +89,8 @@ bool Atom::operator<=(const Atom& atom) const {
 ostream& operator<<(ostream& s,const Atom& atom)
 {
    cout << atom._x << "\t" << atom._y << "\t" << atom._z << "\t"
-        << atom._r << "\n";
-    return s;
+   << atom._r << "\n";
+   return s;
 }
 
 ifstream open_file(int& size);
@@ -108,7 +108,7 @@ Point get_random_point(const Box& box);
 double get_distance(const Point& p, const Atom& a);
 
 /* f(xi) is 1 if the distance from xi to center of any atom inside the box is
-   lesser than its radius */
+ lesser than its radius */
 int calculate_fx(const Point& xi, const Atom atoms[], const unsigned& size);
 
 /* calculate the total volume */
@@ -126,13 +126,17 @@ int main(int argc, const char * argv[]) {
    
    process_file(fin, box, atoms);
    
-   double V = box.volume();
-   unsigned int N = 99999;
-   
-   std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
+   // create an ouput file
+   ofstream fout(output_file);
 
-   cout << "V: "<< V << "\n";
-   cout << results.first << "\t += " << results.second << "\n";
+   double V = box.volume();
+   unsigned int N = 1000;
+   
+   for (int i = 1; i <= N; i++) {
+      std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
+      fout << fixed << setprecision(2) << setw(10);
+      fout << results.first << " += " << results.second << "\t" << i << "\n";
+   }
 }
 
 ifstream open_file(int& size)
@@ -145,31 +149,31 @@ ifstream open_file(int& size)
    fin >> size;
    return fin;
 }
-      
+
 void process_file(ifstream& fin, Box& box, Atom atoms [])
 {
    double x, y, z, r;
    double r_min = std::numeric_limits<double>::max();
    double r_max = std::numeric_limits<double>::min();
    int i = 0;
-
-   while (!fin.eof()) {
    
+   while (!fin.eof()) {
+      
       fin >> x >> y >> z >> r;
-//      cout << x << "\t"  << y << "\t"  << z << "\t"  << r << "\n";
+      //      cout << x << "\t"  << y << "\t"  << z << "\t"  << r << "\n";
       Atom atom(x, y, z, r);
       
       if(r > r_max) r_max = r;
-         
+      
       if (x < box.x_min) box.x_min = x;
       if (x > box.x_max) box.x_max = x;
-         
+      
       if (y < box.y_min) box.y_min = y;
       if (y > box.y_max) box.y_max = y;
-         
+      
       if (z < box.z_min) box.z_min = z;
       if (z > box.z_max) box.z_max = z;
-
+      
       atoms[i++] = atom;
    }
    box.x_min = box.x_min - r_max;
@@ -202,7 +206,7 @@ double get_distance(const Point& p, const Atom& a)
    double d_x = p.get_x() - a.get_x();
    double d_y = p.get_y() - a.get_y();
    double d_z = p.get_z() - a.get_z();
-
+   
    return sqrt(d_x*d_x + d_y*d_y + d_z*d_z);
 }
 
@@ -237,7 +241,7 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       // update the sums
       s = s + f_of_xi;
       s2 = s2 + f_of_xi*f_of_xi;
-    }
+   }
    
    cout << "s: " << s << "s2: " << s2 << endl;
    
