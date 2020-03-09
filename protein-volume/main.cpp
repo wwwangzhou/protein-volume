@@ -243,7 +243,7 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       s2 = s2 + f_of_xi*f_of_xi;
    }
    
-   cout << "s: " << s << "s2: " << s2 << endl;
+//   cout << "s: " << s << "s2: " << s2 << endl;
    
    // comput the means
    double f = s/N;
