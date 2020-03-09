@@ -130,7 +130,7 @@ int main(int argc, const char * argv[]) {
    ofstream fout(output_file);
 
    double V = box.volume();
-   unsigned int N = 1000;
+   unsigned int N = 100;
    
 //   for (int i = 0 ; i < size; i++) {
 //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
@@ -252,11 +252,13 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    double f = s/N;
    double f2 = s2/N;
    
+//   cout << "f " << f << " f2 " << f2 << endl;
+   
    // compute the volume
    double vol = V * f;
    
    // compute the standard deviation error estimate
-   double sd = V * sqrt((f2-f)/N);
+   double sd = V * sqrt((f2-f*f)/N);
    
    return make_pair(vol, sd);
 }
