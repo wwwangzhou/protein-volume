@@ -22,8 +22,8 @@ public:
    Point(const double& x, const double& y, const double&z)
    : _x(x), _y(y), _z(z) {}
    double get_x() const {return _x;}
-   double get_y() const {return _x;}
-   double get_z() const {return _x;}
+   double get_y() const {return _y;}
+   double get_z() const {return _z;}
 };
 
 class Box{
@@ -55,7 +55,7 @@ public:
    bool operator<(const Atom&) const;
    bool operator>=(const Atom&) const;
    bool operator<=(const Atom&) const;
-   double get_r() const {return _x;}
+   double get_r() const {return _r;}
    
    friend ostream& operator<<(ostream&, const Atom& atom);
 };
@@ -130,7 +130,11 @@ int main(int argc, const char * argv[]) {
    ofstream fout(output_file);
 
    double V = box.volume();
-   unsigned int N = 1000;
+   unsigned int N = 100;
+   
+//   for (int i = 0 ; i < size; i++) {
+//      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
+//   }
    
    for (int i = 1; i <= N; i++) {
       std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
