@@ -130,7 +130,7 @@ int main(int argc, const char * argv[]) {
    ofstream fout(output_file);
 
    double V = box.volume();
-   unsigned int N = 100;
+   unsigned int N = 1000;
    
 //   for (int i = 0 ; i < size; i++) {
 //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
