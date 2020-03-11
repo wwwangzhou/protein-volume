@@ -135,23 +135,20 @@ int main(int argc, const char * argv[]) {
    
    fin.close();
    
-   // create an ouput file
-   std::ofstream fout(output_file);
+
    
    double V = box.volume();
-   unsigned int N = 100;
+   unsigned int N = 100000;
    
    //   for (int i = 0 ; i < size; i++) {
    //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
    //   }
    
-   /* O(N^2) */
-   for (int i = 1; i <= N; i++) {
+   /* O(N^3) */
+//   for (int i = 1; i <= N; i++) {
       std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
-      fout << std::fixed << std::setprecision(2) << std::setw(10);
-      fout << results.first << " += " << results.second << "\t" << i << "\n";
-   }
-   fout.close();
+
+//   }
 }
 
 void open_file(int& size, std::ifstream& fin)
@@ -243,6 +240,12 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    // initialize number of random points N
    unsigned int N = n;
    
+   double f = 0, f2 = 0, vol = 0, sd = 0;
+   auto results = std::make_pair(vol, sd);
+   
+   // create an ouput file
+   std::ofstream fout(output_file);
+   
    for(int i = 0 ; i <= N; i ++)
    {
       // position xi at random inside the  box
@@ -254,17 +257,21 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       // update the sums
       s = s + f_of_xi;
       s2 = s2 + f_of_xi*f_of_xi;
+      
+      // compute the means
+      f = s/i;
+      f2 = s2/i;
+      
+      // compute the volume
+      vol = V * f;
+      
+      // compute the standard deviation error estimate
+      sd = V * sqrt((f2-f*f)/i);
+      
+      results = std::make_pair(vol, sd);
+      
+      fout << std::fixed << std::setprecision(2) << std::setw(10);
+      fout << results.first << " += " << results.second << "\t" << i << "\n";
    }
-   
-   // compute the means
-   double f = s/N;
-   double f2 = s2/N;
-   
-   // compute the volume
-   double vol = V * f;
-   
-   // compute the standard deviation error estimate
-   double sd = V * sqrt((f2-f*f)/N);
-   
-   return std::make_pair(vol, sd);
+   return results;
 }
