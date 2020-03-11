@@ -138,7 +138,7 @@ int main(int argc, const char * argv[]) {
 
    
    double V = box.volume();
-   unsigned int N = 10000;
+   unsigned int N = 100000;
    
    //   for (int i = 0 ; i < size; i++) {
    //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
