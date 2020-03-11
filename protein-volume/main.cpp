@@ -10,6 +10,7 @@
 const char input_file[] = "Volume.crd";
 const char output_file[] = "VandN.txt";
 
+/* a point object has three coordinates in 3D space */
 class Point{
 protected:
    double _x;
@@ -36,11 +37,13 @@ public:
    double volume() const;
 };
 
+/* member function to return the volume of the current Box object */
 double Box::volume () const
 {
    return (x_max-x_min) * (y_max - y_min) * (z_max - z_min);
 }
 
+/* an Box object has a point object plus a radius */
 class Atom : public Point
 {
 private:
@@ -84,6 +87,7 @@ bool Atom::operator<=(const Atom& atom) const {
    return atom >= *this;
 }
 
+/* overloaded insertion opeartion makes the printing of Atom object easier */
 std::ostream& operator<<(std::ostream& s,const Atom& atom)
 {
    std::cout << atom._x << "\t" << atom._y << "\t" << atom._z << "\t"
@@ -91,6 +95,7 @@ std::ostream& operator<<(std::ostream& s,const Atom& atom)
    return s;
 }
 
+/* open the input file so that it is ready to be read */
 std::ifstream open_file(int& size);
 
 /* open the input file to make reading operation ready */
@@ -105,8 +110,8 @@ Point get_random_point(const Box& box);
 /* get the distance between two points */
 double get_distance(const Point& p, const Atom& a);
 
-/* f(xi) is 1 if the distance from xi to center of any atom inside the box is
- lesser than its radius */
+/* f(xi) is 1 if the distance from xi to center of any one of these atoms
+   is lesser than its radius */
 int calculate_fx(const Point& xi, const Atom atoms[], const unsigned& size);
 
 /* calculate the total volume */
@@ -244,7 +249,7 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       s2 = s2 + f_of_xi*f_of_xi;
    }
    
-   // comput the means
+   // compute the means
    double f = s/N;
    double f2 = s2/N;
    
