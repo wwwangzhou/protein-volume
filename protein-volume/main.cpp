@@ -128,13 +128,13 @@ int main(int argc, const char * argv[]) {
    
    // create an ouput file
    ofstream fout(output_file);
-
+   
    double V = box.volume();
    unsigned int N = 100;
    
-//   for (int i = 0 ; i < size; i++) {
-//      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
-//   }
+   //   for (int i = 0 ; i < size; i++) {
+   //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
+   //   }
    
    for (int i = 1; i <= N; i++) {
       std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
@@ -246,13 +246,9 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       s2 = s2 + f_of_xi*f_of_xi;
    }
    
-//   cout << "s: " << s << "s2: " << s2 << endl;
-   
    // comput the means
    double f = s/N;
    double f2 = s2/N;
-   
-//   cout << "f " << f << " f2 " << f2 << endl;
    
    // compute the volume
    double vol = V * f;
