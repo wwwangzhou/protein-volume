@@ -10,8 +10,6 @@
 const char input_file[] = "Volume.crd";
 const char output_file[] = "VandN.txt";
 
-using namespace std;
-
 class Point{
 protected:
    double _x;
@@ -57,7 +55,7 @@ public:
    bool operator<=(const Atom&) const;
    double get_r() const {return _r;}
    
-   friend ostream& operator<<(ostream&, const Atom& atom);
+   friend std::ostream& operator<<(std::ostream&, const Atom& atom);
 };
 
 /* enable > comparasion between two atoms */
@@ -86,17 +84,17 @@ bool Atom::operator<=(const Atom& atom) const {
    return atom >= *this;
 }
 
-ostream& operator<<(ostream& s,const Atom& atom)
+std::ostream& operator<<(std::ostream& s,const Atom& atom)
 {
-   cout << atom._x << "\t" << atom._y << "\t" << atom._z << "\t"
+   std::cout << atom._x << "\t" << atom._y << "\t" << atom._z << "\t"
    << atom._r << "\n";
    return s;
 }
 
-ifstream open_file(int& size);
+std::ifstream open_file(int& size);
 
 /* open the input file to make reading operation ready */
-void process_file(ifstream& fin, Box& box, Atom atoms []);
+void process_file(std::ifstream& fin, Box& box, Atom atoms []);
 
 /* get a random number between [min, max] */
 double get_random_double(const double& min, const double& max);
@@ -121,13 +119,13 @@ int main(int argc, const char * argv[]) {
    srand(time(NULL));
    Box box;
    int size; // the number of rows of data in the input file
-   ifstream fin = open_file(size);
+   std::ifstream fin = open_file(size);
    Atom atoms[size];
    
    process_file(fin, box, atoms);
    
    // create an ouput file
-   ofstream fout(output_file);
+   std::ofstream fout(output_file);
    
    double V = box.volume();
    unsigned int N = 100;
@@ -138,23 +136,23 @@ int main(int argc, const char * argv[]) {
    
    for (int i = 1; i <= N; i++) {
       std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
-      fout << fixed << setprecision(2) << setw(10);
+      fout << std::fixed << std::setprecision(2) << std::setw(10);
       fout << results.first << " += " << results.second << "\t" << i << "\n";
    }
 }
 
-ifstream open_file(int& size)
+std::ifstream open_file(int& size)
 {
-   ifstream fin(input_file);
+   std::ifstream fin(input_file);
    if(!fin){
-      cerr << "Unable to process the input file: " << input_file << "\n";
+      std::cerr << "Unable to process the input file: " << input_file << "\n";
       exit(-1);
    }
    fin >> size;
    return fin;
 }
 
-void process_file(ifstream& fin, Box& box, Atom atoms [])
+void process_file(std::ifstream& fin, Box& box, Atom atoms [])
 {
    double x, y, z, r;
    double r_max = std::numeric_limits<double>::min();
@@ -256,5 +254,5 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    // compute the standard deviation error estimate
    double sd = V * sqrt((f2-f*f)/N);
    
-   return make_pair(vol, sd);
+   return std::make_pair(vol, sd);
 }
