@@ -10,9 +10,6 @@
 
 const char input_file[] = "Volume.crd";
 const char output_file[] = "V_N.txt";
-const char output_file1[] = "V_N_Low.txt";
-const char output_file2[] = "V_N_high.txt";
-
 
 /* a point object has three coordinates in 3D space */
 class Point{
@@ -248,8 +245,6 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    
    // create an ouput file
    std::ofstream fout(output_file);
-   std::ofstream fout1(output_file1);
-   std::ofstream fout2(output_file2);
 
    for(int i = 1 ; i <= N; i ++)
    {
@@ -276,11 +271,10 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       results = std::make_pair(vol, sd);
       
       fout << std::fixed << std::setprecision(2) << std::setw(10);
-      fout << results.first << " +- " << results.second << "\t" << i << "\n";
-      fout1 << std::fixed << std::setprecision(2) << std::setw(10);
-      fout1 << results.first - results.second << "\t" << i << "\n";
-      fout2 << std::fixed << std::setprecision(2) << std::setw(10);
-      fout2 << results.first + results.second << "\t" << i << "\n";
+      fout << results.first << " +- " << results.second <<"\t"
+           << results.first - results.second << "\t"
+           << results.first + results.second << "\t" << i << "\n";
+      
    }
    return results;
 }
