@@ -96,7 +96,7 @@ std::ostream& operator<<(std::ostream& s,const Atom& atom)
 }
 
 /* open the input file so that it is ready to be read */
-std::ifstream open_file(int& size);
+void open_file(int& size,std::ifstream& fin);
 
 /* open the input file to make reading operation ready */
 void process_file(std::ifstream& fin, Box& box, Atom atoms []);
@@ -121,10 +121,11 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
 
 int main(int argc, const char * argv[]) {
    
-   srand(time(NULL));
+   srand(static_cast<unsigned int>(time(nullptr)));
    Box box;
    int size; // the number of rows of data in the input file
-   std::ifstream fin = open_file(size);
+   std::ifstream fin;
+   open_file(size, fin);
    Atom atoms[size];
    
    process_file(fin, box, atoms);
@@ -139,6 +140,7 @@ int main(int argc, const char * argv[]) {
    //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
    //   }
    
+   /* O(N^2) */
    for (int i = 1; i <= N; i++) {
       std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
       fout << std::fixed << std::setprecision(2) << std::setw(10);
@@ -146,15 +148,14 @@ int main(int argc, const char * argv[]) {
    }
 }
 
-std::ifstream open_file(int& size)
+void open_file(int& size,std::ifstream& fin)
 {
-   std::ifstream fin(input_file);
+   fin.open(input_file);
    if(!fin){
       std::cerr << "Unable to process the input file: " << input_file << "\n";
       exit(-1);
    }
    fin >> size;
-   return fin;
 }
 
 void process_file(std::ifstream& fin, Box& box, Atom atoms [])
