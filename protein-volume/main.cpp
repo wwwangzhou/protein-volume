@@ -246,7 +246,7 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    // create an ouput file
    std::ofstream fout(output_file);
    
-   for(int i = 0 ; i <= N; i ++)
+   for(int i = 1 ; i <= N; i ++)
    {
       // position xi at random inside the  box
       Point xi = get_random_point(box);
