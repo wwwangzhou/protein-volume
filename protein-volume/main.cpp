@@ -127,18 +127,13 @@ int main(int argc, const char * argv[]) {
    Box box;
    int size; // the number of rows of data in the input file
    std::ifstream fin;
-//   open_file(size, fin);
-   
-   fin.open(input_file);
-   if(!fin){
-      std::cerr << "Unable to process the input file: " << input_file << "\n";
-      exit(-1);
-   }
-   fin >> size;
+   open_file(size, fin);
    
    Atom atoms[size];
    
    process_file(fin, box, atoms);
+   
+   fin.close();
    
    // create an ouput file
    std::ofstream fout(output_file);
@@ -156,6 +151,7 @@ int main(int argc, const char * argv[]) {
       fout << std::fixed << std::setprecision(2) << std::setw(10);
       fout << results.first << " += " << results.second << "\t" << i << "\n";
    }
+   fout.close();
 }
 
 void open_file(int& size, std::ifstream& fin)
