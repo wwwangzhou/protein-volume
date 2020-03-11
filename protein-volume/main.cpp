@@ -271,10 +271,10 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       results = std::make_pair(vol, sd);
       
       fout << std::fixed << std::setprecision(2) << std::setw(10) << std::left
-           << results.first
+           << results.first << "\t"  << std::setw(10)
 //           << results.second <<"\t"
-           << results.first - results.second
-           << results.first + results.second << i << "\n";
+           << results.first - results.second << "\t" << std::setw(10)
+           << results.first + results.second << "\t" << i << "\n";
    }
    return results;
 }
