@@ -6,6 +6,7 @@
 #include <utility>
 #include <random>
 #include <limits>
+#include <iomanip>
 
 const char input_file[] = "Volume.crd";
 const char output_file[] = "VandN.txt";
@@ -49,9 +50,10 @@ class Atom : public Point
 private:
    double _r;
 public:
-   Atom(){};
+   Atom():Point(){};
    Atom(const double& x, const double& y, const double&z, const double& r)
-   : Point(x, y, z), _r(r) {}
+   : Point(x, y, z), _r(r){}
+   Atom(const Point& p) : Point(p) {};
    bool operator>(const Atom&) const;
    bool operator<(const Atom&) const;
    bool operator>=(const Atom&) const;
@@ -125,7 +127,15 @@ int main(int argc, const char * argv[]) {
    Box box;
    int size; // the number of rows of data in the input file
    std::ifstream fin;
-   open_file(size, fin);
+//   open_file(size, fin);
+   
+   fin.open(input_file);
+   if(!fin){
+      std::cerr << "Unable to process the input file: " << input_file << "\n";
+      exit(-1);
+   }
+   fin >> size;
+   
    Atom atoms[size];
    
    process_file(fin, box, atoms);
@@ -148,7 +158,7 @@ int main(int argc, const char * argv[]) {
    }
 }
 
-void open_file(int& size,std::ifstream& fin)
+void open_file(int& size, std::ifstream& fin)
 {
    fin.open(input_file);
    if(!fin){
