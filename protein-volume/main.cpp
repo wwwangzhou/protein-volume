@@ -138,7 +138,7 @@ int main(int argc, const char * argv[]) {
 
    
    double V = box.volume();
-   unsigned int N = 100000;
+   unsigned int N = 10000;
    
    //   for (int i = 0 ; i < size; i++) {
    //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
@@ -270,11 +270,11 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       
       results = std::make_pair(vol, sd);
       
-      fout << std::fixed << std::setprecision(2) << std::setw(10);
-      fout << results.first << " +- " << results.second <<"\t"
-           << results.first - results.second << "\t"
-           << results.first + results.second << "\t" << i << "\n";
-      
+      fout << std::fixed << std::setprecision(2) << std::setw(10) << std::left
+           << results.first
+//           << results.second <<"\t"
+           << results.first - results.second
+           << results.first + results.second << i << "\n";
    }
    return results;
 }
