@@ -135,10 +135,8 @@ int main(int argc, const char * argv[]) {
    
    fin.close();
    
-
-   
    double V = box.volume();
-   unsigned int N = 100000;
+   unsigned int N = 12900;
    
    //   for (int i = 0 ; i < size; i++) {
    //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
@@ -147,7 +145,6 @@ int main(int argc, const char * argv[]) {
    /* O(N^3) */
 //   for (int i = 1; i <= N; i++) {
       std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
-
 //   }
 }
 
