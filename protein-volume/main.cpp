@@ -7,6 +7,7 @@
 #include <random>
 #include <limits>
 #include <iomanip>
+#include <chrono>
 
 const char input_file[] = "Volume.crd";
 const char output_file[] = "V_N.txt";
@@ -242,9 +243,15 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    
    // create an ouput file
    std::ofstream fout(output_file);
+   
+   // get the begining timepoint
+   auto start = std::chrono::high_resolution_clock::now();
+   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
 
    for(int i = 1 ; i <= N; i ++)
    {
+      auto begin = std::chrono::high_resolution_clock::now();
+
       // position xi at random inside the  box
       Point xi = get_random_point(box);
       
@@ -267,11 +274,19 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       
       results = std::make_pair(vol, sd);
       
+      // get stopping timepoint
+      auto stop = std::chrono::high_resolution_clock::now();
+      duration += std::chrono::duration_cast<std::chrono::microseconds>(stop - begin);
+      
+      // add results to the outputfile
       fout << std::fixed << std::setprecision(2) << std::setw(10) << std::left
-           << results.first << "\t"  << std::setw(10)
-//           << results.second <<"\t"
-           << results.first - results.second << "\t" << std::setw(10)
-           << results.first + results.second << "\t" << i << "\n";
+         << results.first << "\t"  << std::setw(10) /* estimated V*/
+         << results.second <<"\t" << std::setw(10) /* estimated V lower bound*/
+         << results.first - results.second << "\t" << std::setw(10)
+         << results.first + results.second << "\t" << std::setw(10)
+         << duration.count() << "\t" << std::setw(10)
+         << i  << "\n";
+
    }
    return results;
 }
