@@ -56,40 +56,10 @@ public:
    Atom(const double& x, const double& y, const double&z, const double& r)
    : Point(x, y, z), _r(r){}
    Atom(const Point& p) : Point(p) {};
-   bool operator>(const Atom&) const;
-   bool operator<(const Atom&) const;
-   bool operator>=(const Atom&) const;
-   bool operator<=(const Atom&) const;
    double get_r() const {return _r;}
    
    friend std::ostream& operator<<(std::ostream&, const Atom& atom);
 };
-
-/* enable > comparasion between two atoms */
-bool Atom::operator>(const Atom& atom) const {
-   if(_x > atom._x && _y > atom._y && _z > atom._z)
-      return true;
-   else
-      return false;
-}
-
-/* enable < comparasion between two atoms */
-bool Atom::operator<(const Atom& atom) const {
-   return atom > *this;
-}
-
-/* enable >= comparasion between two atoms */
-bool Atom::operator>=(const Atom& atom) const {
-   if(_x >= atom._x && _y >= atom._y && _z >= atom._z)
-      return true;
-   else
-      return false;
-}
-
-/* enable <= comparasion between two atoms */
-bool Atom::operator<=(const Atom& atom) const {
-   return atom >= *this;
-}
 
 /* overloaded insertion opeartion makes the printing of Atom object easier */
 std::ostream& operator<<(std::ostream& s,const Atom& atom)
@@ -155,9 +125,7 @@ int main(int argc, const char * argv[]) {
    double V = box.volume();
       
    double SA = get_total_surface_area(atoms, size);
-   
-   std::cout << SA << std::endl;
-   
+      
    monte_carlo(V, N, box, atoms, size);
 
 //   monte_carlo_like(SA, N, atoms, size);
