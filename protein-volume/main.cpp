@@ -118,7 +118,7 @@ double get_distance(const Point& p, const Atom& a);
 int calculate_fx(const Point& xi, const Atom atoms[], const unsigned& size);
 
 /* calculate the total volume */
-std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
+void monte_carlo(const double& V, const unsigned int& n,
                                       const Box& box, const Atom atoms [],
                                       const unsigned& size);
 
@@ -143,10 +143,7 @@ int main(int argc, const char * argv[]) {
    //      cout << atoms[i].get_x() << "\t" << atoms[i].get_y() << "\t" << atoms[i].get_z() << endl;
    //   }
    
-   /* O(N^3) */
-//   for (int i = 1; i <= N; i++) {
-      std::pair <double,double> results = monte_carlo(V,N, box, atoms, size);
-//   }
+   monte_carlo(V,N, box, atoms, size);
 }
 
 void open_file(int& size, std::ifstream& fin)
@@ -229,7 +226,7 @@ int calculate_fx(const Point& xi, const Atom atoms[], const unsigned& size)
    return 0;
 }
 
-std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
+void monte_carlo(const double& V, const unsigned int& n,
                                       const Box& box, const Atom atoms [],
                                       const unsigned& size)
 {
@@ -244,7 +241,7 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    // create an ouput file
    std::ofstream fout(output_file);
    
-   // get the begining timepoint
+   // get the very begining timepoint
    auto start = std::chrono::high_resolution_clock::now();
    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
 
@@ -252,11 +249,8 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
    {
       auto begin = std::chrono::high_resolution_clock::now();
 
-      // position xi at random inside the  box
-      Point xi = get_random_point(box);
-      
-      // compute f(xi),
-      int f_of_xi = calculate_fx(xi, atoms, size);
+      Point xi = get_random_point(box); // position xi at random inside the  box
+      int f_of_xi = calculate_fx(xi, atoms, size); // compute f(xi),
       
       // update the sums
       s = s + f_of_xi;
@@ -266,27 +260,22 @@ std::pair <double,double> monte_carlo(const double& V, const unsigned int& n,
       f = s/i;
       f2 = s2/i;
       
-      // compute the volume
-      vol = V * f;
+      vol = V * f; // compute the volume
       
-      // compute the standard deviation error estimate
+      // compute the standard deviation error
       sd = V * sqrt((f2-f*f)/i);
-      
-      results = std::make_pair(vol, sd);
-      
+            
       // get stopping timepoint
       auto stop = std::chrono::high_resolution_clock::now();
       duration += std::chrono::duration_cast<std::chrono::microseconds>(stop - begin);
       
       // add results to the outputfile
       fout << std::fixed << std::setprecision(2) << std::setw(10) << std::left
-         << results.first << "\t"  << std::setw(10) /* estimated V*/
-         << results.second <<"\t" << std::setw(10) /* estimated V lower bound*/
-         << results.first - results.second << "\t" << std::setw(10)
-         << results.first + results.second << "\t" << std::setw(10)
+         << vol << "\t"  << std::setw(10) /* estimated V*/
+         << sd <<"\t" << std::setw(10) /* estimated V lower bound*/
+         << vol - sd << "\t" << std::setw(10)
+         << vol + sd << "\t" << std::setw(10)
          << duration.count() << "\t" << std::setw(10)
          << i  << "\n";
-
    }
-   return results;
 }
