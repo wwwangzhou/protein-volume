@@ -105,8 +105,8 @@ void monte_carlo(const double& V, const unsigned int& n,
                                       const unsigned& size);
 /* calculate the toal surface area */
 void monte_carlo_like(const double& SA, const unsigned int& N,
-                      const Atom atoms [],
-                      const unsigned& M);
+                                     const Atom atoms [],
+                                     const unsigned& M);
 
 int main(int argc, const char * argv[]) {
    
@@ -124,10 +124,9 @@ int main(int argc, const char * argv[]) {
    
    double V = box.volume();
       
-   double SA = get_total_surface_area(atoms, size);
-      
    monte_carlo(V, N, box, atoms, size);
 
+//   double SA = get_total_surface_area(atoms, size);
 //   monte_carlo_like(SA, N, atoms, size);
 }
 
@@ -162,7 +161,7 @@ void process_file(std::ifstream& fin, Box& box, Atom atoms [])
    while (!fin.eof()) {
       
       fin >> x >> y >> z >> r;
-      //      cout << x << "\t"  << y << "\t"  << z << "\t"  << r << "\n";
+
       Atom atom(x, y, z, r);
       
       if(r > r_max) r_max = r;
@@ -310,11 +309,7 @@ void monte_carlo_like(const double& SA, const unsigned int& N,
                                         const unsigned& M)
 {
    double s = 0, s2 = 0;
-      
    double f = 0, f2 = 0, sa = 0, sd = 0;
-   
-   // create an ouput file
-//   std::ofstream fout(output_file);
    
    // get the very begining timepoint
    auto start = std::chrono::high_resolution_clock::now();
