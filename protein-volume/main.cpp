@@ -126,6 +126,7 @@ int main(int argc, const char * argv[]) {
       
    monte_carlo(V, N, box, atoms, size);
 
+//   we tried to use Monte Carlo-like method, but it gives 0 all the time.
 //   double SA = get_total_surface_area(atoms, size);
 //   monte_carlo_like(SA, N, atoms, size);
 }
