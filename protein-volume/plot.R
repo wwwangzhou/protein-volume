@@ -1,5 +1,0 @@
-install.packages("tidyverse")
-library(ggplot2)
-final = read.table("~/Desktop/129.txt")
-ggplot(final, aes(x = V6, V1)) + geom_ribbon(aes(ymin = V3, ymax=V4), alpha = 0.2) +  geom_line() + labs(title = "V(N)", x = "N", y = "V") + geom_hline(aes(yintercept= 35490.34), colour="#990000", linetype="dashed")
-ggplot(final, aes(x = V6, V5)) + geom_ribbon(aes(ymin = V3, ymax=V4), alpha = 0.2) +  geom_line() + labs(title = "T(N)", x = "N", y = "T")
